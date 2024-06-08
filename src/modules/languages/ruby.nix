@@ -98,7 +98,11 @@ in
 
     env.BUNDLE_PATH = config.env.DEVENV_STATE + "/.bundle";
 
-    env.GEM_HOME = "${config.env.BUNDLE_PATH}/${cfg.package.rubyEngine}/${cfg.package.version.libDir}";
+    env.GEM_HOME =
+      let
+        rubyEngine = if builtins.hasAttr "rubyEngine" cfg.package then cfg.package.rubyEngine else "custom";
+      in
+      "${config.env.BUNDLE_PATH}/${rubyEngine}/${cfg.package.version.libDir}";
 
     enterShell =
       let libdir = cfg.package.version.libDir;
